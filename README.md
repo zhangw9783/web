@@ -3,4 +3,4 @@
 
 ## canvas之旅
 
-- [1.canvas绘制柱状图](./canvas/barChart)
+- [1.canvas绘制柱状图](https://juejin.cn/post/6914196108889554958)
