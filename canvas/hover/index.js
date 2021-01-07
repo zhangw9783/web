@@ -91,7 +91,7 @@ function initChart(id) {
       }
     }
   }
-  bindHover.call()
+  bindHover()
 }
 /**
  * 清除画布
