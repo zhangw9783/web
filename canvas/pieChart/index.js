@@ -157,6 +157,7 @@ function _bindHover(chart) {
             _drawLable(chart, item)
           }
         }
+        break
       }
     }
     if (flag) {
@@ -167,6 +168,9 @@ function _bindHover(chart) {
     }
   }
 }
+/**
+ * 绘制离屏存储的图像
+ */
 function _drawCache(chart, callback) {
   let imageURL = chart._cache[0]
   let img = new Image()
