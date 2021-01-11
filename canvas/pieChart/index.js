@@ -9,7 +9,7 @@ function PieChart(id, data) {
   // 赋值属性
   this._canvas = canvas
   this._context = context
-  // 定义错误信息，在出现错误信息的时候就直接清空画布
+  // 定义错误信息，在出现错误信息的时候就直接清空画布（响应式的）
   let error = ""
   Object.defineProperty(this, '_error', {
     enumerable: false,
@@ -28,10 +28,12 @@ function PieChart(id, data) {
     }
   })
   this._maxValue = 0
-  this._minR = 0
-  this._maxR = 0
-  this.data = this._mapData(data)
-  _bindHover(this)
+  this._minR = 0 // 中间白色圆圈半径
+  this._maxR = 0 // 最大半径
+  this._cache = [] // 离屏canvas图像存储
+  this.data = this._mapData(data) //数据
+  this._last = null // 记录上一个选中的区域
+  _bindHover(this) // 绑定交互事件
 }
 /**
  * 清除画布
@@ -99,9 +101,7 @@ PieChart.prototype._mapData = function(data) {
     item.startAngle = angle
     item.angle = 2 * Math.PI * item.percent
     angle += 2 * Math.PI * item.percent
-    if(!item.color) {//如未给出颜色，则计算颜色
-      item.color = _getColor(159, 100, 200, index)
-    }
+    item.color = _getColor(159, 100, 200, index) // 计算一个颜色
     item.R = Math.sqrt((_R**2 - this._minR**2) * item.percent + this._minR**2) // 计算半径
     return item
   })
@@ -129,8 +129,93 @@ function _getColor(R, G, B, idx) {
 function _bindHover(chart) {
   if (!chart._canvas) return
   chart._canvas.onmousemove = (e) => {
-    // console.log(e);
+    let offsetX = e.offsetX
+    let offsetY = e.offsetY
+    let imageData = chart._context.getImageData(0, 0, chart._canvas.width, chart._canvas.height)
+    let rgba = {}
+    let base = (offsetY) * imageData.width * 4 + (offsetX) * 4
+    rgba.R = imageData.data[base + 0]
+    rgba.G = imageData.data[base + 1]
+    rgba.B = imageData.data[base + 2]
+    rgba.A = imageData.data[base + 3]
+    let flag = true
+    for(let item of chart.data) {
+      let color = item.color
+      if (color.R === rgba.R && color.G === rgba.G && color.B === rgba.B) {
+        flag = false
+        if (chart._cache.length === 0) {
+          chart._cache.push(chart._canvas.toDataURL('image/png'))
+        }
+        if (chart._cache.length === 0 || chart._last !== item.lable) {
+          if(chart._last !== item.lable) {
+            //确保会先清除后再画
+            chart._last = item.lable
+            _drawCache(chart, () => {
+              _drawLable(chart, item)
+            })
+          } else {
+            _drawLable(chart, item)
+          }
+        }
+        break
+      }
+    }
+    if (flag) {
+      if(chart._cache.length > 0) {
+        chart._last = null
+        _drawCache(chart)
+      }
+    }
   }
+}
+/**
+ * 绘制离屏存储的图像
+ */
+function _drawCache(chart, callback) {
+  let imageURL = chart._cache[0]
+  let img = new Image()
+  img.src = imageURL
+  img.onload = () => {
+    chart._clear()
+    chart._context.drawImage(img, 0, 0, chart._canvas.width, chart._canvas.height)
+    callback && callback()
+  }
+}
+/**
+ * 绘制lable
+ */
+function _drawLable(chart, item) {
+  let chartZone = chart._getChartZone()
+    let center = (chartZone[0] + chartZone[1]) / 2
+    let x = center + Math.cos(item.startAngle) * item.R
+    let y = center + Math.sin(item.startAngle) * item.R
+    chart._context.font = 'normal 16px blod'
+    let text = `${item.lable}: ${item.value}`
+    let width = chart._context.measureText(text).width
+    chart._context.beginPath()
+    chart._context.moveTo(x, y)
+    chart._context.fillStyle = 'rgba(0,0,0,0.6)'
+    let x1 = x > center ? chart._maxR + center + 20 : center - chart._maxR - width - 50
+    let y1 = y > center ? chart._maxR + center + 24 : center - chart._maxR - 24
+    chart._context.fillRect(x1, y1, width + 30, 24) //绘制lable背景
+    chart._context.lineTo(x1 > center ? x1 : x1 + width + 30, y1)
+    chart._context.strokeStyle = item.color.str
+    chart._context.strokeWidth = 4
+    chart._context.stroke() // 绘制线条
+    chart._context.fillStyle = '#ffffff'
+    chart._context.fillText(text, x1 + 15, y1 + 18) // 绘制文字
+}
+/**
+ * 计算一个新的更亮的颜色
+ */
+function _newColor(color) {
+  let r = color.R
+  let g = color.G
+  let b = color.B
+  let min = r
+  min = min < g ? min : g
+  min = min < b ? min : b
+  return `rgba(${r*200/min > 255 ? 255 : r*200/min},${g*200/min > 255 ? 255 : g*200/min},${b*200/min > 255 ? 255 : b*200/min},1)`
 }
 
 let data = [
