@@ -9,7 +9,7 @@ function WaterCahrt(id, data) {
   this.data = data
   this.r = r // 圆半径
   this.center = canvasWidth / 2 //圆心x（y）
-  this.intervalId = null
+  // this.intervalId = null
   Object.defineProperty(this, 'offset', { // 定义水波图的偏移量，当偏移量发生变化时自动触发更新
     enumerable: false,
     configurable: false,
@@ -47,11 +47,12 @@ WaterCahrt.prototype.draw = function() {
  * 开启动画
  */
 WaterCahrt.prototype.animation = function() {
-  if(this.intervalId) {
-    clearInterval(this.intervalId)
-    this.intervalId = null
-  }
-  setInterval(() => {
+  // if(this.intervalId) {
+  //   clearInterval(this.intervalId)
+  //   this.intervalId = null
+  // }
+  let fn
+  requestAnimationFrame(fn = () => {
     let arr = this.offset.slice()
     for (let i in arr) {
       if(arr[i] >= this.r*0.8) {
@@ -61,7 +62,8 @@ WaterCahrt.prototype.animation = function() {
       }
     }
     this.offset = arr
-  }, 23)
+    setTimeout(fn, 1000 / 60)
+  })
   return this
 }
 /**
