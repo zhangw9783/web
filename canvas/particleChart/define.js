@@ -80,22 +80,25 @@ function Particle(x = 0, y = 0, r = 1) {
   this.speed = new Vector2(0, 0)
 }
 
-Particle.prototype.update = function(center = new Vector2(0, 0), explodeR = 0, resetDistance = 5, speed = 10, fps=60) {
+Particle.prototype.update = function(center = new Vector2(0, 0), explodeR = 0, resetDistance = 5, minSpeed = 10, fps=60) {
   let pointPos0 = this.pos0.reduce(this.pos1)
-  this.speed = pointPos0.normalize()?.mutiply(speed / fps)
-  let nextPos = this.pos1.add(this.speed)
+  this.speed = pointPos0.normalize()?.mutiply((pointPos0.length / 2 < minSpeed ? minSpeed : pointPos0.length / 2) * 10 / fps)
+  let nextPos = this.pos1.add(this.speed) 
   let pointCenter = this.pos1.reduce(center)
   let nextToPos0 = nextPos.reduce(this.pos0)
   let pos0ToCenter = this.pos0.reduce(center)
   if(pointCenter.length < explodeR) {
-    if (pointCenter.length === 0) return
+    if (pos0ToCenter.length === 0) return
     nextPos = center.add(pointCenter.normalize().mutiply(explodeR).add(pos0ToCenter))
+    // nextPos = center.add(pos0ToCenter.normalize().mutiply(explodeR*1.05))
   } else {
     if(nextToPos0.length < resetDistance) {
       nextPos = this.pos0.copy()
     }
     if (nextPos.reduce(center).length < explodeR) {
+      if (pos0ToCenter.length === 0) return
       nextPos = center.add(pointCenter.normalize().mutiply(explodeR).add(pos0ToCenter))
+      // nextPos = center.add(pos0ToCenter.normalize().mutiply(explodeR*1.05))
     }
   }
   this.pos1 = nextPos

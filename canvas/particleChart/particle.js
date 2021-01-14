@@ -1,5 +1,5 @@
 const EXPLODE_RADIUS = 40
-const SPEED = 200
+const MIN_SPEED = 20
 const FPS = 60
 const RESET_DISTANCE = 10
 const GAP = 5
@@ -38,8 +38,8 @@ function createParticles(x=0, y=0, w=canvas.width, h=canvas.height) {
 function drawParticles() {
   particles.forEach(item => {
     item.forEach(p => {
-      p.update(explodeCenter, EXPLODE_RADIUS, RESET_DISTANCE, SPEED, FPS)
-      drawPoint(p, p.isStart() ? '#ffffff' : '#ff0000')
+      p.update(explodeCenter, EXPLODE_RADIUS, RESET_DISTANCE, MIN_SPEED, FPS)
+      drawPoint(p, '#ffffff')
     })
   })
 }
@@ -47,7 +47,7 @@ function drawParticles() {
 function drawPoint(p = new Particle(), color='#ffffff') {
   ctx.beginPath()
   ctx.fillStyle = color
-  ctx.arc(p.pos1.x, p.pos1.y, p.isStart() ? 1 : 2, 0, 7,false)
+  ctx.arc(p.pos1.x, p.pos1.y, p.r, 0, 7,false)
   ctx.fill()
 }
 
