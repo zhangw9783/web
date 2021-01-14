@@ -88,7 +88,7 @@ Particle.prototype.update = function(center = new Vector2(0, 0), explodeR = 0, r
   let nextToPos0 = nextPos.reduce(this.pos0)
   let pos0ToCenter = this.pos0.reduce(center)
   if(pointCenter.length < explodeR) {
-    if (pos0ToCenter.length === 0) return
+    if (pointCenter.length === 0) return
     nextPos = center.add(pointCenter.normalize().mutiply(explodeR).add(pos0ToCenter))
     // nextPos = center.add(pos0ToCenter.normalize().mutiply(explodeR*1.05))
   } else {
@@ -96,7 +96,7 @@ Particle.prototype.update = function(center = new Vector2(0, 0), explodeR = 0, r
       nextPos = this.pos0.copy()
     }
     if (nextPos.reduce(center).length < explodeR) {
-      if (pos0ToCenter.length === 0) return
+      if (pointCenter.length === 0) return
       nextPos = center.add(pointCenter.normalize().mutiply(explodeR).add(pos0ToCenter))
       // nextPos = center.add(pos0ToCenter.normalize().mutiply(explodeR*1.05))
     }
