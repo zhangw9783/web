@@ -6,6 +6,7 @@ export const codeRep = {
     subscriber.next(3)
     setTimeout(() => {
       subscriber.next(4)
+      subscriber.complete()
     }, 1000)
   })
   writeStr('/*before subscribr*/')
