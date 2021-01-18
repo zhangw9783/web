@@ -1,9 +1,18 @@
 export function writeStr(text, flag = true) {
   let el = document.getElementById('resultStr')
   if(flag) {
-    el.textContent = el.textContent + text
+    el.innerHTML = el.innerHTML + text
   } else {
-    el.textContent = text
+    el.innerHTML = text
+  }
+}
+
+export function writeLine(text, flag = true) {
+  let el = document.getElementById('resultStr')
+  if(flag) {
+    el.innerHTML = el.innerHTML + `<p>${text}</p>`
+  } else {
+    el.innerHTML = `<p>${text}</p>`
   }
 }
 

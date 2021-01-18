@@ -1,5 +1,6 @@
-import { writeStr } from '../util/tool'
-import { Observable } from 'rxjs'
+import { writeStr, writeLine } from '../util/tool'
+import { Observable, of } from 'rxjs'
+import { map, first } from 'rxjs/operators'
 
 export const demoRep = {
   '1': () => {
@@ -21,6 +22,8 @@ export const demoRep = {
     writeStr('/*after subscribr*/')
   },
   '2': () => {
-    writeStr('demo2')
+    map(x => x**2)(of(1,2,3)).subscribe(x=>writeLine(x))
+    writeLine('/*************/')
+    first(x => x**2)(of(1,2,3)).subscribe(x=>writeLine(x))
   }
 }
