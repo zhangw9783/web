@@ -1,0 +1,27 @@
+.demo_bg {
+  /* background: linear-gradient(45deg, #afafaf 25%, #eaeaea 0, #eaeaea 50%, transparent 0)top left / 30px 30px,
+   linear-gradient(45deg, transparent 50%, #afafaf 0, #afafaf 75%, #eaeaea 0)top left / 30px 30px; */
+  background: linear-gradient(hsl(59, 68%, 85%) 50%, #9ccfd8);
+  min-height: 100vh;
+}
+.link {
+  text-decoration: none;
+  color: #333333;
+  font-size: 20px;
+  font-weight: bolder;
+  user-select: none;
+}
+.code_earea {
+  display: flex;
+  margin-top: 20px;
+}
+.editor, .result {
+  flex: 1;
+  min-height: 800px;
+}
+.editor {
+  background-color: #666666;
+}
+.result {
+  background-color: #fff;
+}
