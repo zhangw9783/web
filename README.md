@@ -8,3 +8,5 @@
 - [3.canvas折线图交互效果](https://juejin.cn/post/6914899534644510728)
 - [4.canvas绘制南丁格尔玫瑰图](https://juejin.cn/post/6915748787717668878/)
 - [5.canvas绘制水球图](https://juejin.cn/post/6916705319863844872/)
+
+## [RxJs学习笔记](./RxJs/doc/README.md)

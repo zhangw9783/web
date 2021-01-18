@@ -18,6 +18,6 @@ export const codeRep = {
   writeStr('/*after subscribr*/')
   `,
   '2': `
-  writeStr('demo2')
+  map(x => x**2)(of(1,2,3)).subscribe(x=>writeStr(x))
   `,
 }
