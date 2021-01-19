@@ -7,7 +7,7 @@ module.exports = {
     path: path.join(__dirname, 'dist'),
     filename: '[name].[hash:8].js'
   },
-  mode: 'development',
+  mode: 'production',
   module: {
     rules: [
       {
@@ -34,6 +34,7 @@ module.exports = {
     hot: true,
     progress: false,
     port: 9000,
-    noInfo: true,
+    noInfo: false,
+    quiet: true,
   }
 }

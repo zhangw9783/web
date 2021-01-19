@@ -30,6 +30,13 @@ let observable = new Observable(subscriber => {
       complete() {writeStr('/*done*/')}
     })
     writeStr('/*after subscribr*/')
+// /*before subscribr*/
+// /*get value 1*/
+// /*get value 2*/
+// /*get value 3*/
+// /*after subscribr*/
+// /*get value 4*/
+// /*done*/
 ```
 
 与函数不同，Observables可以返回多个复杂的值（即多次调用next），但是函数只能有一个return。Observables既可以同步返回值，也可以异步返回值。
