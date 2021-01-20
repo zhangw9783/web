@@ -1,11 +1,7 @@
-# Operators
+# Hight-Level Observable
 
-> Rx最重要的就是操作符了。Observable是基础，但是operator可以让复杂的异步代码以声明的方式轻松组成。
+> 高阶Observable，假设在 operator 中返回一个 Observable ，由于 operator 本来就会将结果封装成一个 Observable ，所以就成了 Observable 的 Observable 了。这就是高阶 Observable 。
 
-> operator都是函数。
+处理高阶 Observable 的时候， 就需要使用到 `concatAll` `mergeAll` `switchALL` `exhuast` 等函数了，下图展示了这几个函数的基本效果
 
-## 分类
-
-- 可传递的操作符：可使用`pipe()`来传递，这类操作符会返回一个新的observable，原有的实例并未改变，是一类纯净的操作符。
-
-- 新建操作符：可以单独使用，产生一个新的observable。
+![chart2-1](./assets/chart2-1.jpg)
